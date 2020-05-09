@@ -1,28 +1,10 @@
-import React, { useState, useReducer } from "react";
-import useInterval from "./useInterval";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../static/site.css";
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../static/site.css';
+import useEmailValidation from './useEmailValidation';
 
 function EmailValidatingForm() {
-  const validateEmail = email => {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-  const [emailValid, setEmailValid] = useState(false);
-  const reducer = (state, action) => {
-    state = action;
-    setEmailValid(validateEmail(state));
-    return action;
-  };
-  const [email, setEmail] = useReducer(reducer, "");
-  const secondsFormValidFor = 30;
-  const [count, setCount] = useState(secondsFormValidFor);
-  useInterval(
-    () => {
-      setCount(count - 1);
-    },
-    count > 0 ? 1000 : null
-  );
+  const { count, email, setEmail, emailValid } = useEmailValidation(10);
 
   return (
     <div className="container">
@@ -32,7 +14,7 @@ function EmailValidatingForm() {
           <input
             disabled={count <= 0}
             value={email}
-            onChange={e => {
+            onChange={(e) => {
               setEmail(e.target.value);
             }}
             placeholder="Enter Email"
@@ -52,7 +34,7 @@ function EmailValidatingForm() {
           <div>
             {count > 0
               ? `You Have ${count} Seconds To Enter Your Email`
-              : "Times Up"}
+              : 'Times Up'}
           </div>
         </div>
       </div>
